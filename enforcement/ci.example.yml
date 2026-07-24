@@ -1,0 +1,42 @@
+# FishPond CI 门禁示例（GitHub Actions）。放到 <项目>/.github/workflows/ci.yml。
+# 作用：PR 必须让"构建 + 测试 + 覆盖率阈值"全绿才能合并 —— 本地 pre-commit 之外的第二道强制。
+# 落地后到仓库 Settings → Branches → Branch protection：勾选 "Require status checks to pass"
+# 并选中下面的 verify job，做到"检查不绿就无法合并"。
+#
+# GitLab CI / 其他平台同理：核心就是运行 .fishpond/verify.（sh|ps1）并让失败阻断合并。
+
+name: ci
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest # PowerShell 项目可改 windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # —— 按 PROJECT_PROFILE.md 取消注释对应运行时（示例给了几种）——
+      # - uses: actions/setup-node@v4
+      #   with: { node-version: "20", cache: "pnpm" }
+      # - uses: actions/setup-java@v4
+      #   with: { distribution: "temurin", java-version: "21" }
+      # - uses: actions/setup-go@v5
+      #   with: { go-version: "1.22" }
+      # - uses: actions/setup-python@v5
+      #   with: { python-version: "3.12" }
+
+      # —— 安装依赖（按需）——
+      # - run: pnpm install --frozen-lockfile
+
+      - name: Run FishPond verify (build + test + coverage gate)
+        shell: bash
+        run: |
+          if [ -f .fishpond/verify.sh ]; then
+            sh .fishpond/verify.sh
+          elif [ -f .fishpond/verify.ps1 ]; then
+            pwsh -NoProfile -ExecutionPolicy Bypass -File .fishpond/verify.ps1
+          else
+            echo "缺少 .fishpond/verify.（sh|ps1）—— Phase 0 未生成验证脚本"; exit 1
+          fi

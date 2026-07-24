@@ -1,0 +1,46 @@
+{
+  "_comment": "FishPond · Claude Code 真实权限护栏。把需要的片段合并进你的 .claude/settings.json（项目级）或 ~/.claude/settings.json（用户级）。deny 由 Claude Code 在工具层真实拦截，不是靠模型自觉。",
+  "_comment_windows": "Windows/PowerShell 注意：deny 里同时给了 PowerShell 等价命令（Remove-Item -Recurse -Force / rd /s / git reset --hard 等）。若你的 agent 通过 PowerShell 执行命令，请确认这些 PS 形态也被匹配；不确定时把关键危险命令一并列进 deny。",
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git checkout -b:*)",
+      "Bash(git switch:*)",
+      "Bash(git revert:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push --force-with-lease:*)",
+      "Bash(git rebase:*)",
+      "Bash(sudo:*)",
+      "Bash(chmod -R:*)",
+      "Bash(Remove-Item -Recurse -Force:*)",
+      "Bash(Remove-Item -Force -Recurse:*)",
+      "Bash(rd /s:*)",
+      "Bash(rmdir /s:*)",
+      "Bash(del /f /s /q:*)",
+      "Bash(Set-Content:*.env*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[fishpond] 已改文件。提交前请真实运行 构建+测试 并贴出输出；pre-commit 门禁会二次把关。'"
+          }
+        ]
+      }
+    ]
+  }
+}

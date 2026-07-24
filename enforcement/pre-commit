@@ -1,0 +1,60 @@
+#!/bin/sh
+# FishPond pre-commit gate —— 把"真实验证"变成真拦截，对任何 AI 和人都生效。
+# 安装：install.ps1 / install.sh 会把本文件复制到 <项目>/.githooks/pre-commit
+#       并执行 `git config core.hooksPath .githooks`。
+#
+# 逻辑：
+#   1) 若存在 .fishpond/verify.sh，则运行它；非 0 退出即阻断 commit（测试不绿不许提交）。
+#   2) 简单密钥扫描：暂存区里出现常见密钥字样即阻断（防误提交凭据）。
+# 跳过（仅限紧急且你清楚后果）：FISHPOND_SKIP=1 git commit ...
+
+set -e
+
+if [ "$FISHPOND_SKIP" = "1" ]; then
+  echo "[fishpond] FISHPOND_SKIP=1 —— 跳过验证（你已确认风险）"
+  exit 0
+fi
+
+ROOT=$(git rev-parse --show-toplevel)
+
+# --- 1. 密钥扫描（暂存内容） ---
+if git diff --cached -U0 | grep -nEi '(password|passwd|secret|api[_-]?key|access[_-]?token|private[_-]?key)[^A-Za-z0-9]{0,3}=[^=]' >/dev/null 2>&1; then
+  echo "[fishpond] ❌ 暂存区疑似包含密钥/密码，已阻断提交。请移除后再提交（确需提交请用 FISHPOND_SKIP=1）。"
+  exit 1
+fi
+
+# --- 2. 真实验证（跨平台：优先 PowerShell 版，其次 POSIX sh 版）---
+run_verify() {
+  # 2a. PowerShell 项目：有 verify.ps1 且能找到 pwsh/powershell 就用它
+  if [ -f "$ROOT/.fishpond/verify.ps1" ]; then
+    if command -v pwsh >/dev/null 2>&1; then
+      echo "[fishpond] 运行 .fishpond/verify.ps1 (pwsh) ..."
+      pwsh -NoProfile -ExecutionPolicy Bypass -File "$ROOT/.fishpond/verify.ps1"; return $?
+    elif command -v powershell.exe >/dev/null 2>&1; then
+      echo "[fishpond] 运行 .fishpond/verify.ps1 (powershell.exe) ..."
+      powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$ROOT/.fishpond/verify.ps1"; return $?
+    else
+      echo "[fishpond] ⚠ 有 verify.ps1 但找不到 PowerShell，回退尝试 verify.sh。"
+    fi
+  fi
+  # 2b. POSIX 项目：verify.sh
+  if [ -f "$ROOT/.fishpond/verify.sh" ]; then
+    echo "[fishpond] 运行 .fishpond/verify.sh ..."
+    sh "$ROOT/.fishpond/verify.sh"; return $?
+  fi
+  return 255   # 没有任何 verify 脚本
+}
+
+run_verify
+rc=$?
+if [ "$rc" = "0" ]; then
+  echo "[fishpond] ✅ 验证通过，允许提交。"
+  exit 0
+elif [ "$rc" = "255" ]; then
+  echo "[fishpond] ⚠ 未找到 .fishpond/verify.sh 或 verify.ps1 —— 跳过测试门禁。"
+  echo "[fishpond]   建议 Phase 0 生成它（内含项目真实的 构建 && 测试 + 覆盖率阈值）。"
+  exit 0
+else
+  echo "[fishpond] ❌ 验证失败（测试未绿/覆盖率未达标），已阻断提交。改到绿再提交（紧急可 FISHPOND_SKIP=1）。"
+  exit 1
+fi
