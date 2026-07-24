@@ -59,6 +59,7 @@ description: >-
 | 审查产出的代码 | "审查 / review 这个模块" | [review.md](review.md) |
 | 生产环境排查修复 | "线上出问题 / 帮我排查" | [debug.md](debug.md) |
 | 看填好的范例 | "给我看例子" | [examples.md](examples.md) |
+| 详细使用教程（人看的） | —— | [USAGE.md](USAGE.md) |
 
 ## 任务分级（先判断，避免小事复杂化）
 
