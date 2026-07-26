@@ -2,6 +2,21 @@
 
 遵循语义化版本（大版本.功能.修订）。
 
+## v2.0.0 — 2026-07-26
+**三位一体 + 十一项能力全面封装** — Taste / CodeGraph / Darwin 内嵌；新项目与旧项目通用；语言无关。
+
+**内嵌子技能**
+- [embedded/taste.md](embedded/taste.md)：进化型设计师，TASTE_PROFILE 深造
+- [embedded/codegraph.md](embedded/codegraph.md)：STORY_MAP + SYSTEM_GRAPH 知识图谱
+- [embedded/darwin.md](embedded/darwin.md)：训练式打分 0–20，EVOLUTION 技能进化
+
+**新增流程与模板**
+- [solution.md](solution.md)、[system-design.md](system-design.md)
+- STORY_MAP / SYSTEM_GRAPH / FLOW_ARCHITECTURE / TASTE_PROFILE / DARWIN_SCORES / EVOLUTION / GIT_PROFILE / SESSION_STATE
+- `docs/`：SOLUTION / SOP / ONBOARDING / ENGINEERING_CHARTER / HANDOFF
+- [setup-git.ps1](setup-git.ps1)：Git 画像（无 token）
+- init-project v2：一次初始化 `.fishpond/` + `docs/` 全套
+
 ## v1.1.0 — 2026-07-26
 **全面版补全**——安装、使用、旧项目、初始化一条龙。
 

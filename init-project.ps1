@@ -1,49 +1,54 @@
 <#
-FishPond 项目初始化器 —— 在目标项目里生成完整 .fishpond/ 骨架 + 安装 git 门禁。
+FishPond 项目初始化器 v2 —— .fishpond/ + docs/ 全套 + 门禁 + Git 画像
 用法：
-  ./init-project.ps1                          # 当前目录
-  ./init-project.ps1 -Project C:\path\to\proj  # 指定项目
+  ./init-project.ps1
+  ./init-project.ps1 -Project C:\path\to\proj
 #>
-param(
-  [string]$Project = (Get-Location).Path
-)
+param([string]$Project = (Get-Location).Path)
 
 $ErrorActionPreference = 'Stop'
 $src = $PSScriptRoot
-if (-not (Test-Path (Join-Path $Project '.git'))) { throw "$Project 不是 git 仓库。请先 git init 或在项目根目录运行。" }
+if (-not (Test-Path (Join-Path $Project '.git'))) { throw "$Project 不是 git 仓库。" }
 
 $fp = Join-Path $Project '.fishpond'
 $cards = Join-Path $fp 'cards'
-New-Item -ItemType Directory -Force -Path $fp, $cards | Out-Null
+$docs = Join-Path $Project 'docs'
+$docsHandoff = Join-Path $docs 'HANDOFF'
+New-Item -ItemType Directory -Force -Path $fp, $cards, $docs, $docsHandoff | Out-Null
 
-# 拷贝模板（不覆盖已有文件）
-$tpl = Join-Path $src 'templates'
-$map = @{
-  'PROJECT_PROFILE.md' = 'PROJECT_PROFILE.md'
-  'ARCHITECTURE.md'      = 'ARCHITECTURE.md'
-  'FEATURE_LIST.md'      = 'FEATURE_LIST.md'
-  'UI_UX.md'             = 'UI_UX.md'
-  'DATA_MODEL.md'        = 'DATA_MODEL.md'
-  'API_SPEC.md'          = 'API_SPEC.md'
-  'ROADMAP.md'           = 'ROADMAP.md'
-  'TRACEABILITY.md'      = 'TRACEABILITY.md'
-  'NAVIGATION.md'        = 'NAVIGATION.md'
-  'HANDOFF.md'           = 'HANDOFF.md'
-  'DEVLOG.md'            = 'DEVLOG.md'
-  'LESSONS.md'           = 'LESSONS.md'
-  'CHANGELOG.project.md' = 'CHANGELOG.md'
-}
-foreach ($k in $map.Keys) {
-  $dest = Join-Path $fp $map[$k]
-  if (-not (Test-Path $dest)) {
-    Copy-Item (Join-Path $tpl $k) $dest -Force
-    Write-Host "[fishpond] + $($map[$k])" -ForegroundColor Green
+function Copy-IfMissing($srcFile, $destFile) {
+  if (-not (Test-Path $destFile)) {
+    Copy-Item $srcFile $destFile -Force
+    Write-Host "[fishpond] + $(Split-Path $destFile -Leaf)" -ForegroundColor Green
   } else {
-    Write-Host "[fishpond] = $($map[$k]) (已存在，跳过)" -ForegroundColor DarkGray
+    Write-Host "[fishpond] = $(Split-Path $destFile -Leaf) (已存在，跳过)" -ForegroundColor DarkGray
   }
 }
 
-# verify + pre-commit
+$tpl = Join-Path $src 'templates'
+$fpMap = @{
+  'PROJECT_PROFILE.md'='PROJECT_PROFILE.md'; 'ARCHITECTURE.md'='ARCHITECTURE.md'
+  'FEATURE_LIST.md'='FEATURE_LIST.md'; 'UI_UX.md'='UI_UX.md'
+  'DATA_MODEL.md'='DATA_MODEL.md'; 'API_SPEC.md'='API_SPEC.md'
+  'ROADMAP.md'='ROADMAP.md'; 'TRACEABILITY.md'='TRACEABILITY.md'
+  'NAVIGATION.md'='NAVIGATION.md'; 'HANDOFF.md'='HANDOFF.md'
+  'DEVLOG.md'='DEVLOG.md'; 'LESSONS.md'='LESSONS.md'
+  'CHANGELOG.project.md'='CHANGELOG.md'
+  'STORY_MAP.md'='STORY_MAP.md'; 'SYSTEM_GRAPH.md'='SYSTEM_GRAPH.md'
+  'FLOW_ARCHITECTURE.md'='FLOW_ARCHITECTURE.md'
+  'TASTE_PROFILE.md'='TASTE_PROFILE.md'
+  'DARWIN_SCORES.md'='DARWIN_SCORES.md'; 'EVOLUTION.md'='EVOLUTION.md'
+  'GIT_PROFILE.md'='GIT_PROFILE.md'; 'SESSION_STATE.md'='SESSION_STATE.md'
+}
+foreach ($k in $fpMap.Keys) { Copy-IfMissing (Join-Path $tpl $k) (Join-Path $fp $fpMap[$k]) }
+
+$docsTpl = Join-Path $tpl 'docs'
+Copy-IfMissing (Join-Path $docsTpl 'SOLUTION.md') (Join-Path $docs 'SOLUTION.md')
+Copy-IfMissing (Join-Path $docsTpl 'SOP.md') (Join-Path $docs 'SOP.md')
+Copy-IfMissing (Join-Path $docsTpl 'ONBOARDING.md') (Join-Path $docs 'ONBOARDING.md')
+Copy-IfMissing (Join-Path $docsTpl 'ENGINEERING_CHARTER.md') (Join-Path $docs 'ENGINEERING_CHARTER.md')
+Copy-IfMissing (Join-Path $docsTpl 'HANDOFF\README.md') (Join-Path $docsHandoff 'README.md')
+
 $verify = Join-Path $fp 'verify.ps1'
 if (-not (Test-Path $verify)) {
   Copy-Item (Join-Path $src 'enforcement\verify.example.ps1') $verify -Force
@@ -53,10 +58,12 @@ $hookDir = Join-Path $Project '.githooks'
 New-Item -ItemType Directory -Force -Path $hookDir | Out-Null
 Copy-Item (Join-Path $src 'enforcement\pre-commit') (Join-Path $hookDir 'pre-commit') -Force
 git -C $Project config core.hooksPath .githooks
-Write-Host "[fishpond] pre-commit 门禁已安装（core.hooksPath=.githooks）" -ForegroundColor Green
+Write-Host "[fishpond] pre-commit 门禁已安装" -ForegroundColor Green
+
+& (Join-Path $src 'setup-git.ps1') -Project $Project
 
 Write-Host ""
-Write-Host "完成。下一步：" -ForegroundColor Cyan
-Write-Host "  1) 编辑 $fp\verify.ps1 —— 填入真实构建+测试命令并真跑一次"
-Write-Host "  2) 对 AI 说：用 FishPond 接手/开发这个项目，先读 .fishpond/ 再继续"
-Write-Host "  3) CI：复制 enforcement/ci.example.yml → .github/workflows/ci.yml"
+Write-Host "FishPond v2 初始化完成。" -ForegroundColor Cyan
+Write-Host "  1) 编辑 $fp\verify.ps1 并真跑"
+Write-Host "  2) 对 AI：用 FishPond 接手这个项目，先读 SESSION_STATE 和 SYSTEM_GRAPH"
+Write-Host "  3) 棕地：用 FishPond 只圈鱼塘测绘，不改代码"

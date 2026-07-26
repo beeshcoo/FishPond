@@ -1,7 +1,7 @@
 ---
 name: fishpond
 description: >-
-  FishPond 标准化开发方法论——把大模型"圈"成一小块精准可控的专业区域再执行。适用于任何编程语言、任何框架、任何数据库。模式：结构化开发、大型项目、接手旧项目拆细块、代码审查、生产排查。核心：计划模式先行、模块卡片、文档真相源、交接清单、定位地图、pre-commit+CI 双层门禁。驾驭易错模型（如 DeepSeek）：强制不臆测、真实运行验证、小步单模块交付。触发词：FishPond、圈鱼塘、模块卡片、计划模式、接手旧项目、拆成细块、审查、review、线上排查、交接、HANDOFF。
+  FishPond v2 标准化开发方法论——语言/框架/数据库无关。内嵌 Taste(进化设计师)、CodeGraph(系统知识图谱)、Darwin(训练式技能进化)。模式：需求方案落地、系统设计、故事地图、图谱开发、新旧项目、审查、排查。docs交接+SOP+新手引导+工程规范进化+Git版本+SESSION记忆。pre-commit+CI门禁。触发：FishPond、圈鱼塘、模块卡片、故事地图、知识图谱、CodeGraph、Taste、Darwin、方案落地、旧项目、交接。
 ---
 
 # FishPond — 圈一块精准可控的专业区域
@@ -22,6 +22,32 @@ description: >-
 - 🎨 **高级前端工程师**：组件/状态、7 态齐全、设计系统一致、无假成功。
 
 资深的共同底线：**不臆测、要证据、真实跑、如实报、顾全局、可交接。**
+
+## 三位一体子技能（内嵌封装）
+
+| 子技能 | 文件 | 作用 |
+|---|---|---|
+| **Taste** 进化型设计师 | [embedded/taste.md](embedded/taste.md) | UI/UX；深造规则 → `TASTE_PROFILE.md` |
+| **CodeGraph** 系统知识图谱 | [embedded/codegraph.md](embedded/codegraph.md) | `STORY_MAP`+`SYSTEM_GRAPH` 秒级定位 |
+| **Darwin** 技能进化训练 | [embedded/darwin.md](embedded/darwin.md) | 打分→`EVOLUTION.md`→规范越来越强 |
+
+每张卡交付 = 开发 + Taste 审查 + CodeGraph 更新 + Darwin 打分 + `SESSION_STATE` 写入。
+
+## 十一项能力对照
+
+| # | 需求 | 落点 |
+|---|---|---|
+| 1 | 需求分析与完整方案 | [solution.md](solution.md) |
+| 2 | 子域/责任区/技术决策 | [system-design.md](system-design.md) |
+| 3 | 主/支撑/分支/异常流程 | `FLOW_ARCHITECTURE.md` |
+| 4 | 故事地图 | `STORY_MAP.md` |
+| 5 | 系统知识图谱 | `SYSTEM_GRAPH.md` + CodeGraph |
+| 6 | docs 交接文档 | `docs/HANDOFF/` |
+| 7 | 交付 SOP | `docs/SOP.md` |
+| 8 | 前端新手引导 | `docs/ONBOARDING.md` |
+| 9 | Git 版本记录 | [setup-git.ps1](setup-git.ps1) |
+| 10 | 记忆持久 | `SESSION_STATE.md` |
+| 11 | 工程规范进化 | `docs/ENGINEERING_CHARTER.md` + Darwin |
 
 ## 心法（每次加载先默念）
 
@@ -63,6 +89,11 @@ description: >-
 | 5 分钟快速上手 | —— | [QUICKSTART.md](QUICKSTART.md) |
 | 详细使用教程 | —— | [USAGE.md](USAGE.md) |
 | 完整文件索引 | —— | [INDEX.md](INDEX.md) |
+| 需求分析与方案落地 | "出完整系统方案" | [solution.md](solution.md) |
+| 系统设计/流程/故事地图 | "子域/流程图/故事地图" | [system-design.md](system-design.md) |
+| Taste 设计审查 | "审查 UI/审美" | [embedded/taste.md](embedded/taste.md) |
+| 更新系统图谱 | "更新知识图谱/CodeGraph" | [embedded/codegraph.md](embedded/codegraph.md) |
+| Darwin 打分/进化 | "打分/技能进化" | [embedded/darwin.md](embedded/darwin.md) |
 
 ## 任务分级（先判断，避免小事复杂化）
 
@@ -137,18 +168,27 @@ description: >-
 ├── API_SPEC.md         接口与服务清单：路径/入参/出参/错误码/鉴权 —— 与代码一致
 ├── TRACEABILITY.md     需求↔卡片↔测试↔证据
 ├── ROADMAP.md          史诗→特性→卡片路线图
-├── cards/              模块卡片存档，一模块一张
-├── NAVIGATION.md       定位地图：功能↔接口↔服务↔表↔字段↔代码位置↔错误码（**出问题去哪改**）
-├── HANDOFF.md          交接清单：新人照此即可上手（**边开发边更新，不糊弄**）
-├── DEVLOG.md           开发日志：每次会话/每张卡追加（做了什么/为什么/下一步）
-├── LESSONS.md          踩坑积累
+├── SESSION_STATE.md    关电脑再开也不忘（当前进度/下一步）
+├── STORY_MAP.md        故事地图（业务大地图）
+├── SYSTEM_GRAPH.md     系统知识图谱（CodeGraph）
+├── FLOW_ARCHITECTURE.md 主/支撑/分支/异常流程
+├── TASTE_PROFILE.md    进化型设计师 DNA
+├── DARWIN_SCORES.md    训练式打分
+├── EVOLUTION.md        技能进化补丁
+├── GIT_PROFILE.md      Git 协作画像（无 token）
+├── cards/              模块卡片
+├── NAVIGATION.md       定位地图
+├── HANDOFF.md          交接清单（命令级）
+├── DEVLOG.md           开发日志
+├── LESSONS.md          踩坑
 ├── CHANGELOG.md        交付记录
-└── verify.sh           构建 && 测试（pre-commit 门禁依据）
+└── verify.ps1|sh       门禁
+docs/                   交接总册/SOP/新手引导/工程规范/SOLUTION
 ```
 
 **会话记忆协议（每次都做）**：
-- 🟢 **开工先读**：`PROJECT_PROFILE` + `ARCHITECTURE` + `FEATURE_LIST` + 相关 `cards/` + `DEVLOG` + `LESSONS`（= 恢复记忆，别凭空猜现状）。
-- 🔵 **收工必写**：更新受影响的真相源文档 + 追加 `DEVLOG.md`/`LESSONS.md`/`CHANGELOG.md`（= 保存记忆）。
+- 🟢 **开工先读**：`SESSION_STATE` + `PROJECT_PROFILE` + `ARCHITECTURE` + `SYSTEM_GRAPH` + `STORY_MAP` + `FEATURE_LIST` + 相关 `cards/` + `DEVLOG` + `LESSONS`
+- 🔵 **收工必写**：更新真相源 + `SYSTEM_GRAPH`/`STORY_MAP` + `SESSION_STATE` + `DEVLOG`/`CHANGELOG` + **Darwin 打分** + `EVOLUTION`（低分项）
 
 **三条交付铁律（否则视为未完成、不许交付）**：
 - 📐 **总架构/功能一变必更**：动了边界/依赖/数据模型/对外契约 → 更 `ARCHITECTURE.md`；改了功能 → 更 `FEATURE_LIST.md`。

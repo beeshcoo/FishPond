@@ -117,4 +117,5 @@ API:
 3. **产出清单**：API 变更清单 + 数据库变更清单 + 追加 `CHANGELOG.md`。
 4. **写开发日志**：追加一条 `DEVLOG.md`（做了什么/为什么/验证/影响/下一步）。
 5. **保存记忆**：更新受影响 `cards/`；踩坑追加 `LESSONS.md`。
-6. **交接就绪**：`HANDOFF.md`（模板 [templates/HANDOFF.md](templates/HANDOFF.md)）全部填实、逐条命令**亲测有效**；最好找个没参与的人照它跑通一次。文末"交接确认清单"全绿才算交付。
+6. **交接就绪**：`HANDOFF.md` 全填实；`docs/HANDOFF/README.md` 索引可用；Darwin 打分 ≥12。
+7. **三位一体收工**：Taste 审查 UI diff；更新 `SYSTEM_GRAPH`+`STORY_MAP`；Darwin 打分写入 `DARWIN_SCORES.md`；低分写 `EVOLUTION.md`；更新 `SESSION_STATE.md`。
