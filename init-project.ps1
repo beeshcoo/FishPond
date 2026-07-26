@@ -1,6 +1,6 @@
 <#
-FishPond 项目初始化器 v2 —— .fishpond/ + docs/ 全套 + 门禁 + Git 画像
-用法：
+FishPond project initializer v2 - .fishpond/ + docs/ + hooks + git profile
+Usage:
   ./init-project.ps1
   ./init-project.ps1 -Project C:\path\to\proj
 #>
@@ -8,7 +8,7 @@ param([string]$Project = (Get-Location).Path)
 
 $ErrorActionPreference = 'Stop'
 $src = $PSScriptRoot
-if (-not (Test-Path (Join-Path $Project '.git'))) { throw "$Project 不是 git 仓库。" }
+if (-not (Test-Path (Join-Path $Project '.git'))) { throw "Not a git repo: $Project" }
 
 $fp = Join-Path $Project '.fishpond'
 $cards = Join-Path $fp 'cards'
@@ -17,11 +17,12 @@ $docsHandoff = Join-Path $docs 'HANDOFF'
 New-Item -ItemType Directory -Force -Path $fp, $cards, $docs, $docsHandoff | Out-Null
 
 function Copy-IfMissing($srcFile, $destFile) {
+  $leaf = Split-Path $destFile -Leaf
   if (-not (Test-Path $destFile)) {
     Copy-Item $srcFile $destFile -Force
-    Write-Host "[fishpond] + $(Split-Path $destFile -Leaf)" -ForegroundColor Green
+    Write-Host ('[fishpond] + ' + $leaf) -ForegroundColor Green
   } else {
-    Write-Host "[fishpond] = $(Split-Path $destFile -Leaf) (已存在，跳过)" -ForegroundColor DarkGray
+    Write-Host ('[fishpond] = ' + $leaf + ' (exists, skip)') -ForegroundColor DarkGray
   }
 }
 
@@ -52,18 +53,17 @@ Copy-IfMissing (Join-Path $docsTpl 'HANDOFF\README.md') (Join-Path $docsHandoff 
 $verify = Join-Path $fp 'verify.ps1'
 if (-not (Test-Path $verify)) {
   Copy-Item (Join-Path $src 'enforcement\verify.example.ps1') $verify -Force
-  Write-Host "[fishpond] + verify.ps1（请填入真实构建/测试命令）" -ForegroundColor Yellow
+  Write-Host '[fishpond] + verify.ps1 (fill in build/test commands)' -ForegroundColor Yellow
 }
 $hookDir = Join-Path $Project '.githooks'
 New-Item -ItemType Directory -Force -Path $hookDir | Out-Null
 Copy-Item (Join-Path $src 'enforcement\pre-commit') (Join-Path $hookDir 'pre-commit') -Force
 git -C $Project config core.hooksPath .githooks
-Write-Host "[fishpond] pre-commit 门禁已安装" -ForegroundColor Green
+Write-Host '[fishpond] pre-commit hook installed' -ForegroundColor Green
 
 & (Join-Path $src 'setup-git.ps1') -Project $Project
 
-Write-Host ""
-Write-Host "FishPond v2 初始化完成。" -ForegroundColor Cyan
-Write-Host "  1) 编辑 $fp\verify.ps1 并真跑"
-Write-Host "  2) 对 AI：用 FishPond 接手这个项目，先读 SESSION_STATE 和 SYSTEM_GRAPH"
-Write-Host "  3) 棕地：用 FishPond 只圈鱼塘测绘，不改代码"
+Write-Host ''
+Write-Host 'FishPond v2 init done.' -ForegroundColor Cyan
+Write-Host '  1) Edit .fishpond/verify.ps1 and run it'
+Write-Host '  2) Tell AI: use FishPond on this project, read SESSION_STATE and SYSTEM_GRAPH first'
