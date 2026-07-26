@@ -2,7 +2,26 @@
 
 把大模型"圈"成一小块精准可控的专业区域再执行。**语言无关、框架无关、模型无关**——在 Claude Code（可接 DeepSeek / 任意模型）、Cursor 等支持 Agent Skills 的工具里都能用。
 
-> 📖 **不知道怎么用？先读 [USAGE.md](USAGE.md)** —— 非常详细的手把手教程，含"从零做完一个报销系统"的完整演练。
+> 📖 **5 分钟上手** → [QUICKSTART.md](QUICKSTART.md) · **详细教程** → [USAGE.md](USAGE.md) · **文件索引** → [INDEX.md](INDEX.md)
+
+## 流程一览
+
+```mermaid
+flowchart TD
+  A[安装技能 install.ps1] --> B[初始化项目 init-project.ps1]
+  B --> C{什么场景?}
+  C -->|新项目| D[计划模式: 架构+功能清单+数据+接口]
+  C -->|旧项目| E[圈鱼塘测绘 NAVIGATION]
+  D --> F[拆成细卡片 ROADMAP + cards]
+  E --> F
+  F --> G[一张卡: 开发+测试+更新文档]
+  G --> H{跑绿?}
+  H -->|否| G
+  H -->|是| I[pre-commit + CI 门禁]
+  I --> J{还有下一张卡?}
+  J -->|是| G
+  J -->|否| K[HANDOFF 交接就绪]
+```
 
 ## 这是什么
 
@@ -11,40 +30,31 @@
 ```
 fishpond/
 ├── SKILL.md            # 入口：身份 + 心法 + 路由（工具优先加载它）
-├── USAGE.md            # ⭐ 非常详细的使用指南（含从零到交付的实战演练）—— 先读这个
-├── roles.md            # 六顶资深帽子：PM/架构/数据模型/大数据/后端/前端 及各自把关清单
+├── QUICKSTART.md       # ⭐ 5 分钟快速上手
+├── USAGE.md            # 非常详细的使用指南（含实战演练）
+├── INDEX.md            # 完整文件索引（不知道读哪个时看这里）
+├── roles.md            # 六顶资深帽子及把关清单
 ├── dev.md              # 结构化开发（Phase 0→5，单模块）
-├── large-project.md    # 大型项目模式（史诗拆解/契约先行/追溯/DoD/双层门禁/发布）
-├── review.md           # 代码审查清单（通用 + 各语言附录）
+├── large-project.md    # 大型项目模式（从零）
+├── brownfield.md       # 旧项目/棕地模式（测绘→拆细块→替换）
+├── review.md           # 代码审查清单
 ├── debug.md            # 生产排查协议
-├── examples.md         # 填好的范例（卡片/审查报告/诊断报告）
-├── templates/              # 项目文档真相源模板（拷进 <项目>/.fishpond/ 使用）
-│   ├── PROJECT_PROFILE.md   # 技术栈 + 构建/测试命令
-│   ├── ARCHITECTURE.md      # 总架构（架构一变必更）
-│   ├── FEATURE_LIST.md      # 功能清单（功能一改必更）
-│   ├── DATA_MODEL.md        # 数据库表 + 字段（与代码一致）
-│   ├── API_SPEC.md          # 接口 + 服务清单（与代码一致）
-│   ├── UI_UX.md             # UI/UX 规格
-│   ├── ROADMAP.md           # 史诗→特性→卡片路线图
-│   ├── TRACEABILITY.md      # 需求追溯矩阵（零需求遗漏）
-│   ├── NAVIGATION.md        # 定位地图（功能↔接口↔表↔字段↔代码↔错误码，出问题去哪改）
-│   ├── DEVLOG.md            # 开发日志
-│   └── HANDOFF.md           # 交接清单（边开发边写，新人照此直接上手）
-├── enforcement/
-│   ├── pre-commit           # git 门禁：测试不绿/覆盖率不达标不许 commit（自动择 sh/ps1）
-│   ├── verify.example.sh    # 构建+测试+覆盖率 聚合脚本（POSIX 起始模板）
-│   ├── verify.example.ps1   # 同上（PowerShell/Windows 起始模板）
-│   ├── ci.example.yml       # CI 门禁模板（GitHub Actions，PR 不绿不能合并）
-│   └── settings.example.json# Claude Code 真实权限护栏（含 PowerShell 危险命令形态）
-├── install.ps1 / install.sh # 一键安装到任意工具的技能目录 + 给项目装门禁
-├── LICENSE                  # MIT
-├── CHANGELOG.md             # 版本记录（当前 v1.0.0）
-└── README.md
+├── examples.md         # 填好的范例
+├── templates/          # 项目文档真相源模板（13 个）
+│   ├── PROJECT_PROFILE.md / ARCHITECTURE.md / FEATURE_LIST.md
+│   ├── UI_UX.md / DATA_MODEL.md / API_SPEC.md
+│   ├── ROADMAP.md / TRACEABILITY.md / NAVIGATION.md
+│   ├── CARD.md / HANDOFF.md / DEVLOG.md
+│   └── LESSONS.md / CHANGELOG.project.md
+├── enforcement/        # pre-commit / verify / CI / 权限护栏
+├── install.ps1 / install.sh       # 安装技能到 Claude Code / Cursor
+├── init-project.ps1 / init-project.sh # 初始化目标项目的 .fishpond/
+├── LICENSE / CHANGELOG.md / README.md
 ```
 
 ## 安装
 
-### 方式 A：一键脚本（推荐）
+### 步骤 1 · 安装技能（装到 AI 工具）
 ```powershell
 # Windows / Claude Code（默认）
 ./install.ps1
@@ -53,14 +63,21 @@ fishpond/
 # 顺便给某项目装上 git 测试门禁
 ./install.ps1 -Project C:\path\to\project
 ```
+
+### 步骤 2 · 初始化你的项目（生成 .fishpond/ 全套文档 + 门禁）
+```powershell
+cd C:\path\to\你的项目
+C:\path\to\FishPond\init-project.ps1
+# 然后编辑 .fishpond/verify.ps1，填入真实构建+测试命令
+```
 ```bash
-# macOS / Linux
-./install.sh            # claude（默认）
-./install.sh both       # claude + cursor
-./install.sh claude /path/to/project
+cd /path/to/your-project
+/path/to/FishPond/init-project.sh
 ```
 
-### 方式 B：手动放置
+重启 Claude Code / Cursor 后，对 AI 说：**「用 FishPond 开发/接手这个项目」**。
+
+### 方式 B：手动放置技能
 把整个 `fishpond/` 文件夹复制到：
 - Claude Code：`~/.claude/skills/fishpond/`（用户级）或 `<项目>/.claude/skills/fishpond/`（项目级）
 - Cursor：`~/.cursor/skills/fishpond/`
@@ -86,7 +103,7 @@ fishpond/
 - `enforcement/ci.example.yml`：CI 第二道门禁，PR 不绿不能合并（配合分支保护）。**本地 pre-commit + CI = 双层拦截。**
 - `enforcement/settings.example.json`：Claude Code 工具层真实拦截 `rm -rf` / `reset --hard` / `push --force`（含 PowerShell 形态）。
 
-> 版本 v1.0.0，含诚实的「已知限制」清单，见 [CHANGELOG.md](CHANGELOG.md)。
+> 版本 **v1.1.0**，见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 项目记忆层（跨会话"记忆"的解法）
 

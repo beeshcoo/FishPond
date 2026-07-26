@@ -15,7 +15,13 @@ SRC="$(cd "$(dirname "$0")" && pwd)"
 
 install_to() {
   DIR="$1"; DEST="$DIR/fishpond"
-  mkdir -p "$DIR"; rm -rf "$DEST"; cp -R "$SRC" "$DEST"
+  mkdir -p "$DIR"; rm -rf "$DEST"; mkdir -p "$DEST"
+  for item in "$SRC"/* "$SRC"/.[!.]*; do
+    base="$(basename "$item")"
+    [ "$base" = ".git" ] && continue
+    [ -e "$item" ] || continue
+    cp -R "$item" "$DEST/"
+  done
   echo "[fishpond] 已安装 -> $DEST"
 }
 

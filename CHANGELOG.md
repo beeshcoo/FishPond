@@ -2,6 +2,21 @@
 
 遵循语义化版本（大版本.功能.修订）。
 
+## v1.1.0 — 2026-07-26
+**全面版补全**——安装、使用、旧项目、初始化一条龙。
+
+**新增**
+- [QUICKSTART.md](QUICKSTART.md)：5 分钟快速上手（安装→初始化→触发语→把关三件事）。
+- [INDEX.md](INDEX.md)：完整文件索引（人看/机器加载/模板/门禁/场景路由）。
+- [brownfield.md](brownfield.md)：旧项目/棕地专册（测绘→拆细块→表征测试→绞杀者替换）。
+- [init-project.ps1](init-project.ps1) / [init-project.sh](init-project.sh)：一键初始化目标项目 `.fishpond/` 全套文档 + pre-commit 门禁。
+- 模板：`templates/CARD.md`（模块卡片标准）、`LESSONS.md`、`CHANGELOG.project.md`（项目交付记录）。
+- `.gitignore`；`install` 排除 `.git` 避免污染技能目录。
+
+**增强**
+- `SKILL.md` frontmatter 扩展触发词（旧项目、拆细块、交接、计划模式等）。
+- `dev.md` 引用 CARD 标准模板。
+
 ## v1.0.0 — 2026-07-24
 首个可发布版本。语言无关、模型无关（Claude Code 接 DeepSeek / 任意模型），符合 Agent Skills 开放格式。
 

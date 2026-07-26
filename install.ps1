@@ -28,7 +28,10 @@ function Install-To($dir) {
   $dest = Join-Path $dir 'fishpond'
   New-Item -ItemType Directory -Force -Path $dir | Out-Null
   if (Test-Path $dest) { Remove-Item $dest -Recurse -Force }
-  Copy-Item $src $dest -Recurse -Force
+  # 排除 .git，避免把发布用 git 历史装进技能目录
+  Get-ChildItem $src -Force | Where-Object { $_.Name -ne '.git' } | ForEach-Object {
+    Copy-Item $_.FullName (Join-Path $dest $_.Name) -Recurse -Force
+  }
   Write-Host "[fishpond] 已安装 -> $dest" -ForegroundColor Green
 }
 
