@@ -1,19 +1,12 @@
 <#
-FishPond 技能安装器 (Windows / PowerShell)
+FishPond 技能安装器 → 安装为 RingPond 圈域 (Windows / PowerShell)
 
-把本技能装进任意支持 Agent Skills 的工具的技能目录。
+把本技能装进 Claude Code / Cursor 的技能目录（目录名 ringpond）。
 用法：
-  # 装进 Claude Code（默认，用户级）
-  ./install.ps1
-
-  # 装进 Cursor
+  ./install.ps1                    # Claude Code（默认）
   ./install.ps1 -Target cursor
-
-  # 两个都装
   ./install.ps1 -Target both
-
-  # 同时给某个项目装上 git pre-commit 门禁
-  ./install.ps1 -Project C:\path\to\your\project
+  ./install.ps1 -Project C:\path\to\project
 #>
 param(
   [ValidateSet('claude','cursor','both')] [string]$Target = 'claude',
@@ -25,7 +18,7 @@ $src = $PSScriptRoot
 if (-not (Test-Path (Join-Path $src 'SKILL.md'))) { throw "在 $src 找不到 SKILL.md，请在技能根目录运行。" }
 
 function Install-To($dir) {
-  $dest = Join-Path $dir 'fishpond'
+  $dest = Join-Path $dir 'ringpond'
   New-Item -ItemType Directory -Force -Path $dir | Out-Null
   if (Test-Path $dest) { Remove-Item $dest -Recurse -Force }
   # 排除 .git，避免把发布用 git 历史装进技能目录
@@ -57,4 +50,4 @@ if ($Project -ne '') {
   Write-Host "[fishpond] CI 门禁模板见 enforcement/ci.example.yml，复制到 .github/workflows/ci.yml 并设为必需检查。" -ForegroundColor Cyan
 }
 
-Write-Host "[fishpond] 完成。重启 Claude Code / Cursor 后，说'用 FishPond 开发…'即可触发。" -ForegroundColor Cyan
+Write-Host "[ringpond] Done. Restart Claude Code/Cursor. Say: use RingPond on this project." -ForegroundColor Cyan

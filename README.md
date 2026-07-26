@@ -1,141 +1,77 @@
-# FishPond 技能包
+# RingPond 圈域 · 技能包
 
-把大模型"圈"成一小块精准可控的专业区域再执行。**语言无关、框架无关、模型无关**——在 Claude Code（可接 DeepSeek / 任意模型）、Cursor 等支持 Agent Skills 的工具里都能用。
+**RingPond（圈域）** — 把大模型圈进一块精准可控的专业域再执行。  
+**语言无关 · 框架无关 · 模型无关 · 新项目与旧项目通用**
 
-> 📖 **5 分钟上手** → [QUICKSTART.md](QUICKSTART.md) · **详细教程** → [USAGE.md](USAGE.md) · **文件索引** → [INDEX.md](INDEX.md)
+> 🏠 **About** → [ABOUT.md](ABOUT.md)  
+> 📘 **完整教程（建议精读）** → [TUTORIAL.md](TUTORIAL.md)  
+> ⚡ **5 分钟上手** → [QUICKSTART.md](QUICKSTART.md)  
+> 📑 **文件索引** → [INDEX.md](INDEX.md)
+
+> 仓库 [github.com/beeshcoo/FishPond](https://github.com/beeshcoo/FishPond)（历史仓库名；技能品牌 **RingPond 圈域**）  
+> 兼容触发词：`RingPond` / `圈域` / `FishPond` / `圈鱼塘`
 
 ## 流程一览
 
 ```mermaid
 flowchart TD
-  A[安装技能 install.ps1] --> B[初始化项目 init-project.ps1]
-  B --> C{什么场景?}
-  C -->|新项目| D[计划模式: 架构+功能清单+数据+接口]
-  C -->|旧项目| E[圈鱼塘测绘 NAVIGATION]
-  D --> F[拆成细卡片 ROADMAP + cards]
+  A[install.ps1 装技能] --> B[init-project.ps1 初始化项目]
+  B --> C{新项目 or 旧项目?}
+  C -->|新| D[计划模式 SOLUTION + 真相源]
+  C -->|旧| E[圈域测绘 CodeGraph]
+  D --> F[细卡片 ROADMAP]
   E --> F
-  F --> G[一张卡: 开发+测试+更新文档]
-  G --> H{跑绿?}
-  H -->|否| G
-  H -->|是| I[pre-commit + CI 门禁]
-  I --> J{还有下一张卡?}
-  J -->|是| G
-  J -->|否| K[HANDOFF 交接就绪]
+  F --> G[开发 + Taste + 图谱 + Darwin]
+  G --> H[pre-commit + CI]
+  H --> I[docs 交接交付]
 ```
 
 ## 这是什么
 
-一个符合 **Agent Skills 开放格式**（`SKILL.md` + YAML frontmatter）的技能包。任何遵循该格式的 AI 工具，只要把本文件夹放进它的技能目录，就能自动发现并按需加载。
+符合 **Agent Skills 开放格式** 的技能包。安装到 Claude Code / Cursor 后，说触发词自动加载。
+
+**内嵌三位一体：** Taste（进化设计师）· CodeGraph（知识图谱）· Darwin（技能进化训练）
 
 ```
-fishpond/
-├── SKILL.md            # 入口：身份 + 心法 + 路由（工具优先加载它）
-├── QUICKSTART.md       # ⭐ 5 分钟快速上手
-├── USAGE.md            # 非常详细的使用指南（含实战演练）
-├── INDEX.md            # 完整文件索引（不知道读哪个时看这里）
-├── roles.md            # 六顶资深帽子及把关清单
-├── dev.md              # 结构化开发（Phase 0→5，单模块）
-├── large-project.md    # 大型项目模式（从零）
-├── brownfield.md       # 旧项目/棕地模式（测绘→拆细块→替换）
-├── review.md           # 代码审查清单
-├── debug.md            # 生产排查协议
-├── examples.md         # 填好的范例
-├── templates/          # 项目文档真相源模板（13 个）
-│   ├── PROJECT_PROFILE.md / ARCHITECTURE.md / FEATURE_LIST.md
-│   ├── UI_UX.md / DATA_MODEL.md / API_SPEC.md
-│   ├── ROADMAP.md / TRACEABILITY.md / NAVIGATION.md
-│   ├── CARD.md / HANDOFF.md / DEVLOG.md
-│   └── LESSONS.md / CHANGELOG.project.md
-├── enforcement/        # pre-commit / verify / CI / 权限护栏
-├── install.ps1 / install.sh       # 安装技能到 Claude Code / Cursor
-├── init-project.ps1 / init-project.sh # 初始化目标项目的 .fishpond/
-├── LICENSE / CHANGELOG.md / README.md
+ringpond/                    # 安装目录名（推荐）
+├── ABOUT.md                 # 品牌与 About
+├── TUTORIAL.md              # 非常详细的完整教程
+├── SKILL.md                 # Agent 入口 (name: ringpond)
+├── embedded/                # taste · codegraph · darwin
+├── solution.md · system-design.md · brownfield.md · …
+├── templates/ + docs/ 模板
+├── enforcement/             # pre-commit · verify · CI
+├── install.ps1 · init-project.ps1 · setup-git.ps1
+└── …
 ```
 
 ## 安装
 
-### 步骤 1 · 安装技能（装到 AI 工具）
+### 步骤 1 · 装技能
 ```powershell
-# Windows / Claude Code（默认）
-./install.ps1
-# 装进 Cursor / 两个都装
-./install.ps1 -Target cursor      # 或 -Target both
-# 顺便给某项目装上 git 测试门禁
-./install.ps1 -Project C:\path\to\project
+git clone https://github.com/beeshcoo/FishPond.git
+cd FishPond
+./install.ps1                 # → ~/.claude/skills/ringpond/
+./install.ps1 -Target both    # 同时装 Cursor
 ```
+重启 Claude Code / VS Code。
 
-### 步骤 2 · 初始化你的项目（生成 .fishpond/ 全套文档 + 门禁）
+### 步骤 2 · 初始化项目
 ```powershell
-cd C:\path\to\你的项目
-C:\path\to\FishPond\init-project.ps1
-# 然后编辑 .fishpond/verify.ps1，填入真实构建+测试命令
+./init-project.ps1 -Project C:\path\to\项目
+./setup-git.ps1 -Project C:\path\to\项目
 ```
-```bash
-cd /path/to/your-project
-/path/to/FishPond/init-project.sh
-```
+编辑 `.fishpond/verify.ps1` 填入真实构建+测试命令。
 
-重启 Claude Code / Cursor 后，对 AI 说：**「用 FishPond 开发/接手这个项目」**。
+## 十一项能力
 
-### 方式 B：手动放置技能
-把整个 `fishpond/` 文件夹复制到：
-- Claude Code：`~/.claude/skills/fishpond/`（用户级）或 `<项目>/.claude/skills/fishpond/`（项目级）
-- Cursor：`~/.cursor/skills/fishpond/`
-
-重启工具后，说"用 FishPond 开发 X 模块 / 审查这段代码 / 帮我排查线上问题"即可触发。
-
-## 让"所有 AI 都能查找安装"
-
-1. 把本文件夹作为独立仓库推到 GitHub（如 `beeshcoo/FishPond`）。
-2. 任何人（或任何能执行命令的 AI agent）都可以：
-   ```bash
-   git clone https://github.com/beeshcoo/FishPond.git
-   cd FishPond && ./install.sh        # 或 install.ps1
-   ```
-3. 因为用的是标准 `SKILL.md` frontmatter，安装后 Claude Code / Cursor 等会**自动发现**并在匹配到触发词时加载——无需手动配置。
-
-> 说明：目前没有"全 AI 统一注册中心"。跨工具通用的现实做法就是：**开放格式 + 公共 Git 仓库 + 安装脚本**。本包三者齐备。
-
-## 真强制（不靠模型自觉）
-
-- `enforcement/pre-commit`：装到项目后，**构建/测试不通过或覆盖率不达标就无法 commit**，对 DeepSeek、Claude、人类一视同仁；自动识别 `verify.ps1`(PowerShell) 或 `verify.sh`(POSIX)。
-- `.fishpond/verify.(sh|ps1)`：Phase 0 按 `PROJECT_PROFILE` 生成，内含真实"构建 && 测试(含覆盖率阈值)"命令，是门禁判定依据（模板 `enforcement/verify.example.*`）。
-- `enforcement/ci.example.yml`：CI 第二道门禁，PR 不绿不能合并（配合分支保护）。**本地 pre-commit + CI = 双层拦截。**
-- `enforcement/settings.example.json`：Claude Code 工具层真实拦截 `rm -rf` / `reset --hard` / `push --force`（含 PowerShell 形态）。
-
-> 版本 **v1.1.0**，见 [CHANGELOG.md](CHANGELOG.md)。
-
-## 项目记忆层（跨会话"记忆"的解法）
-
-模型不跨会话记忆，所以每个项目根下建一个 `.fishpond/` 当"外置大脑"，会话开工先读、收工必写：
-
-```
-<项目>/.fishpond/
-├── PROJECT_PROFILE.md  技术栈 + 构建/测试命令
-├── ARCHITECTURE.md     总架构（架构一变必更）
-├── FEATURE_LIST.md     功能清单（功能一改必更）
-├── UI_UX.md            UI/UX 规格
-├── DATA_MODEL.md       数据库表 + 字段（与代码 0 误差对齐）
-├── API_SPEC.md         接口 + 服务清单（与代码 0 误差对齐）
-├── ROADMAP.md          史诗→特性→卡片路线图
-├── TRACEABILITY.md     需求↔卡片↔测试↔证据
-├── NAVIGATION.md       定位地图（出问题/找代码看这里）
-├── cards/              模块卡片存档
-├── DEVLOG.md           开发日志（每次追加）
-├── LESSONS.md          踩坑积累
-├── CHANGELOG.md        交付记录
-└── verify.sh           构建 && 测试（pre-commit 门禁依据）
-```
-
-- **计划模式先行**：动手前先聊清楚、确认总架构 + 功能清单 + UI/UX + 数据模型 + 接口，人拍板后才写代码。
-- **分块处理**：大任务先拆成有序卡片清单，交人确认，一次只做一张、跑绿再下一张（隔离爆炸半径 + 改一块做全局影响分析）。
-- **0 误差对齐**：功能清单/数据库/接口/UI 与代码严格一致，任何不符即缺陷。
-- **资深团队入戏**：加载即扮演 PM/架构/数据模型/大数据/后端/前端 六顶资深帽子，各带把关清单（`roles.md`）。
-- **可交接**：`HANDOFF.md` 边开发边写、命令亲测有效 + 充分注释 + 开发日志，让没参与过的开发人员照文档直接上手。
-- **可定位**：`NAVIGATION.md` 定位地图 + 代码锚点，凭功能名/报错/表名/字段 30 秒定位到代码、表、接口——出问题知道去哪改。
+需求分析 · 系统设计 · 流程图 · 故事地图 · 知识图谱 · docs 交接 · SOP · 新手引导 · Git 版本 · 跨会话记忆 · 规范进化 — 详见 [ABOUT.md](ABOUT.md)。
 
 ## 设计原则
 
-- **人做决策，模型执行**：架构与模块边界由人拍板，模型只在卡片范围内干活。
-- **不臆测 / 真实跑 / 如实报**：结论必须紧跟真实命令输出与退出码。
-- **语言平等**：主流程零语言偏向；`review.md` 为 Java/Go/Python/前端等提供地位平等的附录，可自行追加。
+- **人拍板，AI 在卡片边界内执行**
+- **不臆测 / 真实跑 / 如实报**
+- **文档↔代码↔图谱 0 误差**
+- **测试不绿不能提交**
+
+> 版本 **v2.1.0** · [CHANGELOG.md](CHANGELOG.md)

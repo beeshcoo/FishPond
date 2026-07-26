@@ -2,6 +2,14 @@
 
 遵循语义化版本（大版本.功能.修订）。
 
+## v2.1.0 — 2026-07-26
+**品牌重塑为 RingPond 圈域** + About + 超详细教程
+
+- 正式品牌：**RingPond（圈域）**；`name: ringpond`；兼容 FishPond/圈鱼塘 触发词
+- 新增 [ABOUT.md](ABOUT.md)：使命、三位一体、十一项能力、诚实边界、与 FishPond 关系
+- 新增 [TUTORIAL.md](TUTORIAL.md)：11 篇完整教程（安装/新项目/旧项目/三位一体/记忆/Git/docs/实验/FAQ）
+- 安装目录改为 `ringpond/`；README/QUICKSTART/INDEX 全面更新
+
 ## v2.0.0 — 2026-07-26
 **三位一体 + 十一项能力全面封装** — Taste / CodeGraph / Darwin 内嵌；新项目与旧项目通用；语言无关。
 

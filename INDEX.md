@@ -1,14 +1,16 @@
-# FishPond 技能包 · 完整索引
+# RingPond 圈域 · 完整索引
 
-> 当前版本 **v1.1.0**。不知道读哪个文件时，从这里找。
+> 品牌 **RingPond（圈域）** · 当前 **v2.1.0** · About → [ABOUT.md](ABOUT.md) · 教程 → [TUTORIAL.md](TUTORIAL.md)
 
 ## 人先看（Human）
 | 文件 | 给谁看 | 内容 |
 |---|---|---|
+| [ABOUT.md](ABOUT.md) | 所有人 | 品牌 About：使命、三位一体、十一项能力 |
+| [TUTORIAL.md](TUTORIAL.md) | 所有人 | **非常详细的完整教程（11篇）** |
 | [QUICKSTART.md](QUICKSTART.md) | 所有人 | 5 分钟安装+触发+把关 |
-| [USAGE.md](USAGE.md) | 所有人 | 非常详细的使用教程+实战演练 |
-| [README.md](README.md) | 所有人 | 项目介绍、安装、设计原则 |
-| [CHANGELOG.md](CHANGELOG.md) | 维护者 | 技能包版本变更 |
+| [USAGE.md](USAGE.md) | 所有人 | 使用教程+实战演练 |
+| [README.md](README.md) | 所有人 | 项目介绍、安装 |
+| [CHANGELOG.md](CHANGELOG.md) | 维护者 | 版本变更 |
 
 ## 机器加载（Agent 入口）
 | 文件 | 何时读 |

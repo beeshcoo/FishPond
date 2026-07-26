@@ -1,6 +1,6 @@
-# FishPond · 5 分钟快速上手
+# RingPond 圈域 · 5 分钟快速上手
 
-> 详细教程见 [USAGE.md](USAGE.md)。本文只讲最短路径。
+> 品牌 **RingPond（圈域）** · About → [ABOUT.md](ABOUT.md) · 完整教程 → [TUTORIAL.md](TUTORIAL.md)
 
 ## 1. 安装（1 分钟）
 ```powershell

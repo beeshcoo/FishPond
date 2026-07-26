@@ -1,12 +1,13 @@
 ---
-name: fishpond
+name: ringpond
 description: >-
-  FishPond v2 标准化开发方法论——语言/框架/数据库无关。内嵌 Taste(进化设计师)、CodeGraph(系统知识图谱)、Darwin(训练式技能进化)。模式：需求方案落地、系统设计、故事地图、图谱开发、新旧项目、审查、排查。docs交接+SOP+新手引导+工程规范进化+Git版本+SESSION记忆。pre-commit+CI门禁。触发：FishPond、圈鱼塘、模块卡片、故事地图、知识图谱、CodeGraph、Taste、Darwin、方案落地、旧项目、交接。
+  RingPond 圈域——把大模型圈进一块精准可控的专业域再执行。语言/框架/数据库无关。内嵌 Taste(进化设计师)、CodeGraph(系统知识图谱)、Darwin(训练式技能进化)。模式：需求方案落地、系统设计、故事地图、图谱开发、新旧项目、审查、排查。docs交接+SOP+新手引导+工程规范进化+Git版本+SESSION记忆。pre-commit+CI门禁。触发：RingPond、圈域、FishPond、圈鱼塘、模块卡片、故事地图、知识图谱、CodeGraph、Taste、Darwin、方案落地、旧项目、交接。
 ---
 
-# FishPond — 圈一块精准可控的专业区域
+# RingPond 圈域 — 圈一块精准可控的专业域
 
-> 所有大模型在我们面前都是一个太平洋，靠 agent 去圈一小块我们专业的区域出来给我们用，哪个 agent 圈得精准就能更快更完美地执行任务。
+> 品牌：**RingPond（圈域）** · [ABOUT.md](ABOUT.md) · 完整教程 [TUTORIAL.md](TUTORIAL.md)  
+> 别名 FishPond / 圈鱼塘（兼容）· 太平洋里圈一块专业域给 AI 用
 
 **语言无关**：Java / Go / Python / Rust / Node / 前端 / 任何语言、任何框架、任何数据库都适用。本技能不锁定任何特定技术栈。
 
@@ -87,6 +88,8 @@ description: >-
 | 生产环境排查修复 | "线上出问题 / 帮我排查" | [debug.md](debug.md) |
 | 看填好的范例 | "给我看例子" | [examples.md](examples.md) |
 | 5 分钟快速上手 | —— | [QUICKSTART.md](QUICKSTART.md) |
+| About / 品牌介绍 | —— | [ABOUT.md](ABOUT.md) |
+| **完整教程（非常详细）** | —— | [TUTORIAL.md](TUTORIAL.md) |
 | 详细使用教程 | —— | [USAGE.md](USAGE.md) |
 | 完整文件索引 | —— | [INDEX.md](INDEX.md) |
 | 需求分析与方案落地 | "出完整系统方案" | [solution.md](solution.md) |

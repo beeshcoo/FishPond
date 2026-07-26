@@ -14,7 +14,7 @@ SRC="$(cd "$(dirname "$0")" && pwd)"
 [ -f "$SRC/SKILL.md" ] || { echo "在 $SRC 找不到 SKILL.md"; exit 1; }
 
 install_to() {
-  DIR="$1"; DEST="$DIR/fishpond"
+  DIR="$1"; DEST="$DIR/ringpond"
   mkdir -p "$DIR"; rm -rf "$DEST"; mkdir -p "$DEST"
   for item in "$SRC"/* "$SRC"/.[!.]*; do
     base="$(basename "$item")"
